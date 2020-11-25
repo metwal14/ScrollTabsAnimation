@@ -6,109 +6,141 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  SafeAreaView,
+  TouchableOpacity,
   StyleSheet,
   ScrollView,
   View,
   Text,
+  Image,
   StatusBar,
+  Animated
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
+const Pictures = () => {
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+    <View style={{ flex: 1, backgroundColor: 'green' }}>
+      <Text>{'Pictures'}</Text>
+      {/* <Image
+        style={{ resizeMode: 'cover', width: '100%', }}
+        source={require('./assets/cover1.jpg')}
+      /> */}
+      <View style={{backgroundColor:'grey',height:100}}/>
+      <View style={{backgroundColor:'grey',height:100}}/>
+
+      <View style={{backgroundColor:'grey',height:100}}/>
+      <View style={{backgroundColor:'grey',height:100}}/>
+      <View style={{backgroundColor:'grey',height:100}}/>
+      <View style={{backgroundColor:'grey',height:100}}/>
+      <View style={{backgroundColor:'grey',height:100}}/>
+      <View style={{backgroundColor:'grey',height:100}}/>
+
+    </View>
+  )
+}
+const Movies = () => {
+  return (
+    <View>
+      <Image
+        style={{ resizeMode: 'cover', width: '100%', height: '30%' }}
+        source={require('./assets/cover1.jpg')}
+      />
+      <Text>{'Movies'}</Text>
+    </View>
+  )
+}
+const Games = () => {
+  return (
+    <View>
+      <Image
+        style={{ resizeMode: 'cover', width: '100%', height: '30%' }}
+        source={require('./assets/cover1.jpg')}
+      />
+      <Text>{'Games'}</Text>
+    </View>
+  )
+}
+
+
+const App = () => {
+  const [tabValue, setTabValue] = useState('movies');
+  const [scrollYValue, setScrollYValue] = useState(0);
+
+  const onClick = (value) => {
+    setTabValue(value);
+  }
+  const onScrollHandle = e => {
+    const scrollPosition = e.nativeEvent.contentOffset.y;
+    console.log(scrollPosition)
+    setScrollYValue(scrollPosition)
+  }
+  return (
+    <View style={{ flex: 1, }}>
+      <StatusBar barStyle='light-content' />
+      <Image
+        style={{ resizeMode: 'cover', width: '100%', height: '30%' }}
+        source={require('./assets/cover.jpg')}
+      />
+      <ScrollView
+        onScroll={onScrollHandle}
+      >
+        <View style={{ marginTop: '5%' }}>
+          <Text>{'CONTENTS'}</Text>
+        </View>
+        <Animated.View style={{
+          flex:1,
+          transform: [{ translateY: scrollYValue*12 }],
+          position: 'absolute',
+          // bottom:'60%',
+          // height:scrollYValue*100,
+          backgroundColor: '#222831', flexDirection: 'row', justifyContent: 'space-between'
+        }}>
+          <View style={{ width: '33%', paddingVertical: '3%', backgroundColor: 'red', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => onClick('pictures')}
+            >
+              <Text>{'Pictures'}</Text>
+            </TouchableOpacity>
           </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+          <View style={{ width: '33%', paddingVertical: '3%', backgroundColor: 'red', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => onClick('movies')}
+            >
+              <Text>{'Movies'}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ width: '33%', paddingVertical: '3%', backgroundColor: 'red', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => onClick('games')}
+            >
+              <Text>{'Games'}</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+        <View style={{ flex: 1 }}>
+          {
+            tabValue === 'pictures' ?
+              <Pictures /> :
+              tabValue === 'movies' ?
+                <Movies /> :
+                tabValue === 'games' ?
+                  <Games /> : null
+
+
+
+          }
+        </View>
+      </ScrollView>
+
+
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+
 });
 
 export default App;
